@@ -2,12 +2,15 @@
 
 % Method 1
 
+% Step 1: Initialize
 clc; clear;
 filename = input('Enter image name: ','s');
 color = input('Is image stained with live-dead staining or cell tracker? Enter answer as either live-dead or cell tracker: ','s');
 pix = imread(filename);
 [h,w,c] = size(pix);
 binary = false(h,w);
+
+% Step 2: Count pixels in live-dead stain
 count = 0;
 if color == "live-dead"
     for ii=1:1:h
@@ -15,19 +18,20 @@ if color == "live-dead"
             r = pix(ii, jj, 1);
             g = pix(ii, jj, 2);
             b = pix(ii, jj, 3);
-            if r>=183 && r<=255 && g>=90 && g<=241 && b>=33 && b<=170 %&& r>b+45
+            if r>=183 && r<=255 && g>=90 && g<=241 && b>=33 && b<=170 
                 binary(ii,jj)= 1;
                 count = count + 1;
             end
         end
     end
+% Step 3: Count pixels in cell tracker stain     
 elseif color == "cell tracker"
     for ii=1:1:h
         for jj=1:1:w
             r = pix(ii, jj, 1);
             g = pix(ii, jj, 2);
             b = pix(ii, jj, 3);
-            if r>=170 && r<=255 && g>=70 && g<=140 && b>=55 && b<=140 %&& r>b+45
+            if r>=170 && r<=255 && g>=70 && g<=140 && b>=55 && b<=140 
                 binary(ii,jj)= 1;
                 count = count + 1;
             end
@@ -75,7 +79,7 @@ BWfinal=bwareafilt(BWfinal,[50 3000]);
 imshow(BWfinal);
 title('Segmented Image');
 
-% Step 7:Visualize the Segmentation
+% Step 7: Visualize the Segmentation
 figure(1)
 subplot(2,1,1)
 imshowpair(pix, binary, 'montage');
@@ -84,7 +88,7 @@ subplot(2,1,2)
 imshow(labeloverlay(I,BWfinal));
 title('Mask Over Original Image: Method 2');
 
-% Calculations
+% Step 8: Calculations
 CC = bwconncomp(BWfinal);
 m1_cell = round(count/78.168);
 m2_cell = CC.NumObjects;
@@ -97,43 +101,3 @@ else
     fprintf('Method 2 cell count:%d\n',m2_cell);
     fprintf('Average cell count:%.2f\n',(m1_cell + m2_cell)/2);
 end
-
-
-% Total cell count on scaffold
-
-% Image Thresholding:
-% clc; clear;
-% filename = input('Enter filename: ','s');
-% pix = imread(filename);
-% [h, w, c] = size(pix);
-% binary = false(h,w);
-% for ii=1:1:h
-%     for jj=1:1:w
-%         r = pix(ii, jj, 1);
-%         g = pix(ii, jj, 2);
-%         b = pix(ii, jj, 3);
-%         if r <100 && g >5 && g< 130 && b >50 && b<160 && b>r && b>g
-%             binary(ii,jj)= 1;
-%         end
-%     end
-% end
-% blank = zeros(h,w);
-% for ii = 2:1:h-1
-%     for jj = 2:1:w-1
-%         x = double(binary(ii,jj))*-4;
-%         y = double(binary(ii-1,jj));
-%         z = double(binary(ii+1,jj));
-%         a = double(binary(ii,jj-1));
-%         b = double(binary(ii,jj+1));
-%         blank(ii,jj) = x+y+z+a+b;
-%     end
-% end
-% blank = blank>0;
-% for ii=1:1:h
-%     for jj=1:1:w
-%         if blank(ii,jj)==1
-%             pix(ii,jj,:) = 255;
-%         end
-%     end
-% end
-% imshow(pix);
