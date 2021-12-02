@@ -71,6 +71,7 @@ title('Cleared border image');
 seD = strel('square',1);
 BWfinal = imerode(BWnobord, seD);
 BWfinal = imerode(BWfinal, seD);
+BWfinal=bwareafilt(BWfinal,[50 3000]);
 imshow(BWfinal);
 title('Segmented Image');
 
