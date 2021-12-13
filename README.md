@@ -11,5 +11,6 @@ For guidance on how to distinguish if it is live-dead staining or cell tracker:
 Live-dead staining:Starch hydrogel images where cells are stained with live-dead staining. Yellow-orange color represents the live cells.
 Cell tracker: Starch hydrogel images where cells are stained with red fluorescent tracker. No distinction between dead and live cells.
 
-Sample input/output attached below:
+Sample input/output:
+
 <img width="549" alt="Sample input:output" src="https://user-images.githubusercontent.com/94568660/145754397-1273717b-a695-4454-acaa-8119058802f0.png">
